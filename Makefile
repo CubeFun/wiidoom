@@ -26,7 +26,7 @@ DIST		:=	dist/apps/WiiDoom
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DHAVE_CONFIG_H
+CFLAGS	= -g -O2 -Wall -std=gnu17 $(MACHDEP) $(INCLUDE) -DHAVE_CONFIG_H
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
