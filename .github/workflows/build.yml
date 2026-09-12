@@ -14,6 +14,14 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Work around devkitPro CDN blocking non-browser clients
+        run: |
+          apt-get update -qq && apt-get install -y -qq curl || true
+          CONF=$(find /opt/devkitpro/pacman/etc -name pacman.conf | head -n1)
+          echo "Patching $CONF to route downloads through curl with a browser User-Agent"
+          sed -i '/^\[options\]/a XferCommand = /usr/bin/curl -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36" -L --fail -o %o %u' "$CONF"
+          cat "$CONF" | grep -A2 '^\[options\]'
+
       - name: Install Wii toolchain libraries
         run: |
           dkp-pacman -Sy --noconfirm --needed wii-dev ppc-portlibs wii-portlibs
